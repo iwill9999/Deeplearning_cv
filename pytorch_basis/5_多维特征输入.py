@@ -42,7 +42,7 @@ dataset = DiabetesDataset('diabetes_data.csv.gz')
 #   shuffle 打乱数据集顺序 num_workers 读数据集时是不是用并行化 几个并行的进程读取数据
 #   batch_size 有多少个batch
 train_loader = DataLoader(dataset=dataset,
-                          batch_size=2,
+                          batch_size=32,
                           shuffle=True)
 
 model = Model()
@@ -60,6 +60,7 @@ if __name__ == '__main__':
             y_pred = model(inputs)
             loss = criterion(y_pred, labels)
             print(epoch, i, loss.item())
+            print(model.linear1.weight.data,model.linear2.weight.data,model.linear3.weight.data)
             #   Backward
             optimizer.zero_grad()
             loss.backward
