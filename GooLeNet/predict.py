@@ -35,7 +35,7 @@ def main():
     # create model
     model = GooLeNet(num_classes=5, aux_logits=False).to(device)
     # load model path
-    weights_path = './gooLeNet.pth'
+    weights_path = './GooLeNet.pth'
     assert os.path.exists(weights_path), '{} is noe exists.'.format(weights_path)
     # strict=True 严格按照参数一一对应 但实例化没有辅助分类区 不用严格对照
     missing_keys, unexpected_keys = model.load_state_dict(torch.load(weights_path, map_location=device),
