@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch
 
 
-# 18 / 32 layers
+# 18 / 34 layers
 class BasicBlock(nn.Module):
     expansion = 1
 
@@ -94,7 +94,7 @@ class ResNet(nn.Module):
 
     def __init__(self,
                  block,
-                 blocks_num,
+                 blocks_num,    # 列表 表示残差块分别多少 如34层味[3, 4, 6, 3]
                  num_classes=1000,
                  include_top=True,
                  groups=1,
