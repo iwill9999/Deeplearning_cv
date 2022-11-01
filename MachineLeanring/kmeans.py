@@ -23,19 +23,24 @@ def distance(vecA, vecB):
     return np.sqrt(np.sum(np.power(vecA - vecB, 2)))
 
 
-def randCenter(dataSet, k):
+def randCenter(dataSet, k, samplesNum):
     """
-    随机生成k个点作为质心，其中质心均在真个数据的边界之内
+    随机生成k个点作为质心，其中质心均在真个整个数据的边界之内
     """
     n = dataSet.shape[1]  # 获得数据维度
     # 创建一个k行n列的全零矩阵
     centroids = np.mat(np.zeros((k, n)))
+    """centroids = np.mat(np.zeros((k, n)))
     for j in range(n):
         minJ = np.min(dataSet[:, j])
-        rangeJ = np.float64(np.max(dataSet[:, j]) - minJ)
+        print(minJ.shape)
+        rangeJ = np.float(np.max(dataSet[:, j]) - minJ)
         # np.random.rand返回k个服从0~1均匀分布的的随机样本值
-        centroids[:, j] = minJ + rangeJ * np.random.rand(k, 1)
-        return centroids
+        centroids[:, j] = minJ + rangeJ * np.random.rand(k, 1)"""
+    for j in range(k):
+        index = int(np.random.uniform(0, samplesNum))
+        centroids[j, :] = dataSet[index, :]
+    return centroids
 
 
 def KMeans(dataSet, k, dist=distance, createCenter=randCenter):
@@ -48,7 +53,7 @@ def KMeans(dataSet, k, dist=distance, createCenter=randCenter):
     # 构建一个簇分配结果矩阵，共两列，第一列为样本所属的簇类值，第二列为样本到簇心的误差
     clusterAssignment = np.mat(np.zeros((m, 2)))
     # 初始化k个质心
-    centroids = randCenter(dataSet, k)
+    centroids = randCenter(dataSet, k, m)
     clusterChanged = True
     while clusterChanged:
         clusterChanged = False
@@ -62,10 +67,10 @@ def KMeans(dataSet, k, dist=distance, createCenter=randCenter):
                 if distanceJI < minDistance:
                     minDistance = distanceJI
                     minIndex = j
-                # 更新样本每一行所属的簇
-                if clusterAssignment[i, 0] != j:
-                    clusterChanged = True
-                clusterAssignment[i, :] = minIndex, minDistance ** 2
+            # 更新样本每一行所属的簇
+            if clusterAssignment[i, 0] != minIndex:
+                clusterChanged = True
+            clusterAssignment[i, :] = minIndex, minDistance ** 2
 
         # 更新簇质心
         for center in range(k):
@@ -86,7 +91,7 @@ def KMeans(dataSet, k, dist=distance, createCenter=randCenter):
             pCluster = dataSet[np.nonzero(clusterAssignment[:, 0].A == center)[0]]
             # 沿矩阵pCluster列的方向求均值 等号左右的维度都是(1, n)
             centroids[center, :] = np.mean(pCluster, axis=0)
-            return centroids, clusterAssignment
+    return centroids, clusterAssignment
 
 
 k = 5
@@ -115,7 +120,7 @@ plt.ylabel('petal width')
 plt.subplots_adjust(wspace=0.5)
 
 plt.subplot(122)
-plt.scatter(X[:, 0], X[:, 1], c=y_kmeans, s=50, cmap='viridis')
+plt.scatter(X[:, 0], X[:, 1], s=50, cmap='viridis')
 plt.scatter(centroids[:, 0], centroids[:, 1], c='red', s=100, alpha=0.5)
 plt.xlabel('petal length')
 plt.ylabel('petal width')
