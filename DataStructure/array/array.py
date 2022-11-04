@@ -15,6 +15,7 @@ print(a)
 # Update element O(1)
 a[2] = 88
 
+# pop会返回删除的那个元素
 # Remove element
 a.remove(88)  # O(n) 删指定元素
 a.pop(1)      # O(n) 根据索引删元素 因为删除之后每个元素都要移动

@@ -38,6 +38,7 @@ print(linkedlist)
 linkedlist.remove(88)   # 删除指定元素
 del linkedlist[2]       # 删除指定索引元素
 
+
 # Length O(1)
 length = len(linkedlist)
 
